@@ -1,0 +1,244 @@
+---
+title: "Profession Survey"
+author: "Moksha Shah"
+date: "February 9, 2019"
+output:
+  html_document: default
+---
+
+
+## Installing Necessary Packages
+
+```{r}
+#install.packages("tidyverse")
+#install.packages("tidyverse", repos = "https://cran.rstudio.com")
+#install.packages("car")
+```
+```{r}
+# For Data Cleaning
+library(tidyverse)
+library(dplyr)
+library(rlang)
+library(stringr)
+library(car)
+
+```
+## Loading Data
+
+```{r}
+#importing Dataset
+rawPIdata <- read.csv("ProfessionInformation.csv", stringsAsFactors = T, header = T)
+rawFFdata = read.csv("freeformResponses.csv", stringsAsFactors = F, header = T)
+rawSdata= read.csv("schema.csv", stringsAsFactors = F, header = T)
+```
+```{r}
+# Number of rows
+nrow(rawPIdata)
+ncol(rawPIdata)
+```
+
+The data looks very clumsy, but to ensure that we keep our raw data un-touched, we’ll create a duplicate dataframe called “cleanPIdata".
+
+```{r}
+cleanPIData <- rawPIdata
+```
+
+ For functions, the only arguments are the question number and the option to feed in filtered data if necessary.
+
+### Function for single choice questions {#function-chooseOne}
+```{r}
+# A function to analyze questions where you choose only one answer
+chooseOne = function(question, filteredData = cleanPIData){
+  
+  filteredData %>% 
+    # Remove any rows where the respondent didn't answer the question
+    filter(!UQ(sym(question)) == "") %>% 
+    # Group by the responses to the question
+    group_by_(question) %>% 
+    # Count how many respondents selected each option
+    summarise(count = n()) %>% 
+    # Calculate what percent of respondents selected each option
+    mutate(percent = (count / sum(count)) * 100) %>% 
+    # Arrange the counts in descending order
+    arrange(desc(count))
+  
+}
+```
+
+```{r echo = FALSE}
+questionText = function(questionName){
+  rawSdata %>%
+ filter(Column == questionName) %>%
+    select(Question)
+}
+```
+## Demographics
+
+### Current Residence
+
+```{r echo = FALSE}
+questionText("Country")
+```
+
+```{r}
+residence <- chooseOne("Country")
+
+residence
+```
+( only countries with more than 20 people are displayed) 
+
+```{r}
+residenceFilter <- residence %>% 
+  filter(count >= 20)
+
+ggplot(residenceFilter, aes(x = reorder(Country, count), y = count)) + 
+  geom_bar(stat = "identity") +
+  theme(axis.text.x = element_text(angle = 90, 
+                                   vjust = 0.5, 
+                                   hjust = 1))
+```
+### Age Analysis
+
+```{r echo = FALSE}
+questionText("Age")
+```
+
+
+```{r}
+# This column needs to be read as numbers
+cleanPIData$Age <- as.numeric(cleanPIData$Age)
+
+age <- chooseOne("Age") %>% 
+   # Remove values < 1 year
+  filter(!Age < 1)
+age
+```
+What is the age distribution of users?
+```{r}
+agedata <- cleanPIData %>% 
+  # Remove any rows where the respondent didn't answer the question
+  filter(!Age == "") %>% 
+  select(Age)
+  
+
+ggplot(agedata, aes(x = Age)) + 
+  geom_histogram(binwidth = 2) + 
+  xlab("Age (years)") + 
+  ylab("Number of Users")
+```
+
+The vast majority of Kaggle users are young adults (early 20’s to 30’s).
+
+```{r}
+top5 <- residence %>% 
+  # add a row number to each row
+  
+  mutate(row = row_number()) %>% 
+  # select only the top 5 countries
+  filter( row <= 5) %>% 
+  # keep only the country name column
+  select(Country) %>% 
+  # change these to character elements, instead of factors
+  mutate(Country = as.character(Country))
+
+# Create a list of the top 5 countries
+top5List <- top5$Country
+
+top5Age <- cleanPIData %>% 
+  # Keep only entries whose country is included in the top 5 list
+ 
+  filter(Country %in% top5List) %>% 
+  # Remove any ages that are under a year or NA or blank
+  filter(Age > 1, 
+         !is.na(Age)) %>% 
+  filter(!Age == "") %>% 
+  # Group the data by country and then age
+  group_by(Country, Age)
+ 
+ggplot(top5Age, aes(x = Age,fill = Country)) + 
+  geom_density(alpha = 0.3) + 
+  facet_wrap(~Country) + 
+  ylab("Density of Users of a Given Age") + 
+  theme(legend.position="none")
+```
+
+there’s a wider age-range of users in the US and UK.
+
+### Employment Status
+
+```{r echo = FALSE}
+questionText("EmploymentStatus")
+
+chooseOne("EmploymentStatus")
+```
+
+About 65% of the 16,716 users who answered this question are currently employed full-time, while 12.6% are unemployed and looking for work. Nearly 8% of respondents consider themselves self-employed or freelancers. 
+
+## Career Profile (Non-Workers)
+
+### Student Status
+
+```{r echo = FALSE}
+questionText("StudentStatus")
+
+chooseOne("StudentStatus")
+```
+ 76% are currently in degree-granting schools.
+
+### Learning Data Science
+
+```{r echo = FALSE}
+questionText("LearningDataScience")
+
+chooseOne("LearningDataScience")
+```
+## Career Profile (Workers)
+
+### Job Tasks
+
+```{r echo = FALSE}
+questionText("CodeWriter")
+
+chooseOne("CodeWriter")
+```
+
+So 77% of employed Kaggle users write code in their current job. 
+
+```{r echo = FALSE}
+questionText("CareerSwitcher")
+chooseOne("CareerSwitcher")
+```
+70% of the employed Kaggle users that don't currently write code in their job are planning to switch into a data science field.
+
+### Job Titles
+
+```{r}
+questionText("CurrentJobTitleSelect")
+
+chooseOne("CurrentJobTitleSelect")
+```
+
+About 45% of Kaggle users are either Data Scientists, Software Developers/Engineers or Data Analysts. Predictive Modeler, Data Miner, and Operations Research Practitioner are among the least common job titles.
+
+### training in each category
+```{r}
+training <- cleanPIData %>% 
+  # Keep only the columns that start with "LearningCategory" and don't include "FreeForm"
+  select(starts_with("LearningCategory"), -contains("FreeForm")) %>% 
+  # Set column names
+  purrr::set_names(c("Self-taught", "Online Courses", "Work", "University Lecture", "University Practical Course", "Other")) %>% 
+  # Re-structure the data
+  gather(key = response, value = percent) %>% 
+  # Remove any rows where the percentage was NA
+  filter(!is.na(percent)) %>% 
+  # Change the percentage column to a number
+  mutate(percent = as.numeric(percent))
+
+ggplot(training, aes(x = percent, fill = response)) + 
+  geom_histogram(bins = 8) + 
+  facet_wrap(~response) + 
+  ylab("Responses of a given percentage") + 
+  theme(legend.position="none")
+```
+
+Online courses and self-teaching seem to have the widest range of percentages reported.
