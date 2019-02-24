@@ -14,6 +14,9 @@ The project is an explanatory data visualization from a data set that communicat
 I first sifted through the dataset and roughly thought about which variables I was interested in exploring and which were outside the domain of my exploration. I first planned to look over sales and profit that global store made in these four years.
 I wanted my Tableau story to have a purpose, to show to those who are interested in the facts about the store market understanding. My focus was to find out which are the major factor assist the business in making profit for the Store.
 
+### Tableau Public
+[Profile](https://public.tableau.com/views/ShoppingBag/Story1?:embed=y&:display_count=yes&publish=yes)
+
 ### Refrences
 [Tableau Tutorials](https://www.tableau.com/learn/training)
 
