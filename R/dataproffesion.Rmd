@@ -11,8 +11,7 @@ output:
 
 ```{r}
 #install.packages("tidyverse")
-#install.packages("tidyverse", repos = "https://cran.rstudio.com")
-#install.packages("car")
+
 ```
 ```{r}
 # For Data Cleaning
@@ -20,14 +19,12 @@ library(tidyverse)
 library(dplyr)
 library(rlang)
 library(stringr)
-library(car)
-
 ```
 ## Loading Data
 
 ```{r}
 #importing Dataset
-rawPIdata <- read.csv("ProfessionInformation.csv", stringsAsFactors = T, header = T)
+rawPIdata = read.csv("ProfessionInformation.csv", stringsAsFactors = T, header = T)
 rawFFdata = read.csv("freeformResponses.csv", stringsAsFactors = F, header = T)
 rawSdata= read.csv("schema.csv", stringsAsFactors = F, header = T)
 ```
@@ -40,7 +37,7 @@ ncol(rawPIdata)
 The data looks very clumsy, but to ensure that we keep our raw data un-touched, we’ll create a duplicate dataframe called “cleanPIdata".
 
 ```{r}
-cleanPIData <- rawPIdata
+cleanPIData = rawPIdata
 ```
 
  For functions, the only arguments are the question number and the option to feed in filtered data if necessary.
@@ -81,14 +78,14 @@ questionText("Country")
 ```
 
 ```{r}
-residence <- chooseOne("Country")
+residence = chooseOne("Country")
 
 residence
 ```
 ( only countries with more than 20 people are displayed) 
 
 ```{r}
-residenceFilter <- residence %>% 
+residenceFilter = residence %>% 
   filter(count >= 20)
 
 ggplot(residenceFilter, aes(x = reorder(Country, count), y = count)) + 
@@ -106,16 +103,18 @@ questionText("Age")
 
 ```{r}
 # This column needs to be read as numbers
-cleanPIData$Age <- as.numeric(cleanPIData$Age)
+cleanPIData$Age = as.numeric(cleanPIData$Age)
 
-age <- chooseOne("Age") %>% 
+age = chooseOne("Age") %>% 
    # Remove values < 1 year
   filter(!Age < 1)
 age
 ```
+
 What is the age distribution of users?
+
 ```{r}
-agedata <- cleanPIData %>% 
+agedata = cleanPIData %>% 
   # Remove any rows where the respondent didn't answer the question
   filter(!Age == "") %>% 
   select(Age)
@@ -130,7 +129,7 @@ ggplot(agedata, aes(x = Age)) +
 The vast majority of Kaggle users are young adults (early 20’s to 30’s).
 
 ```{r}
-top5 <- residence %>% 
+top5 = residence %>% 
   # add a row number to each row
   
   mutate(row = row_number()) %>% 
@@ -142,9 +141,9 @@ top5 <- residence %>%
   mutate(Country = as.character(Country))
 
 # Create a list of the top 5 countries
-top5List <- top5$Country
+top5List = top5$Country
 
-top5Age <- cleanPIData %>% 
+top5Age = cleanPIData %>% 
   # Keep only entries whose country is included in the top 5 list
  
   filter(Country %in% top5List) %>% 
@@ -222,7 +221,7 @@ About 45% of Kaggle users are either Data Scientists, Software Developers/Engine
 
 ### training in each category
 ```{r}
-training <- cleanPIData %>% 
+training = cleanPIData %>% 
   # Keep only the columns that start with "LearningCategory" and don't include "FreeForm"
   select(starts_with("LearningCategory"), -contains("FreeForm")) %>% 
   # Set column names
