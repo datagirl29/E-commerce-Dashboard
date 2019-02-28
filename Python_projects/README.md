@@ -12,7 +12,7 @@ This dataset includes a record for every individual or organization that was awa
 
 ### Project Details
 
-I have looked over some basic questions which helped me in the data analysis process.Like,Which country has won the most prizes in each category? What words are most frequently written in the prize motivation? Can you predict the age, gender, and nationality of next year's Nobel laureates? Nobel Prize by Country/Category/Sex?
+I have looked over some basic questions which helped me in the data analysis process.Like,Which country has won the most prizes in each category? Who was the youngest and oldest to win nobel prize? How to predict the age, gender, and nationality of next year's Nobel laureates? Nobel Prize by Country/Category/Sex?
 
 ### Design Decisions
 
