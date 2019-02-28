@@ -1,30 +1,28 @@
-# Tableau Project-ShoppingBag
-This repository contains the analysis and visualizations I have created in Tableau.
+#Python_project - Nobel Prize History
+###Introduction
 
-A Store analysis is a quantitative and qualitative assessment of a market. It looks into the size of the market both in volume and in value, the various customer segments and buying patterns, the competition, and the economic environment in terms of barriers to entry and regulation.Especially for retailers just starting out, it may feel like a lot of decisions are made on guesswork or instinct. Market research can remove much of that uncertainty, by helping you understand your industry, your target customer, your competition, and your product.
+ The Nobel Prize , is a set of annual international awards bestowed in several categories by Swedish and Norwegian institutions in recognition of academic, cultural, or scientific advances.
+    The will of the Swedish scientist Alfred Nobel established the five Nobel prizes in 1895. The prizes in Chemistry, Literature, Peace, Physics, and Physiology or Medicine were first awarded in 1901.The Nobel Prize is widely regarded as the most prestigious award available in the fields of literature, medicine, physics, chemistry, economics and activism for peace.
+    A person or organization awarded the Nobel Prize is called Nobel Laureate. The word "laureate" refers to being signified by the laurel wreath. In ancient Greece, laurel wreaths were awarded to victors as a sign of honor.
 
-### About
-GlobalShoppingBag is a data set which has around 50000 values. Its a customer centric data set , which has the data of all the orders that have been placed through different vendors and markets , starting from the year 2011 till 2015.
+###Content
+
+This dataset includes a record for every individual or organization that was awarded the Nobel Prize since 1901.
 
 ### Project Details
-The GlobalShoppingBag consist of many attributes like sales, profit, product category, dates, cost, shipping details and many more.
-The project is an explanatory data visualization from a data set that communicates a clear finding that highlights relationships and  patterns in a data set.First I have understood the data in R language.I looked at how each factor(Sales, Profit, Time, Cost, Area, Shipping details) help in understanding overall business of Global store. Most of the relationships tells how sales and profit are affecting other factors.
+
+I have looked over some basic questions which helped me in the data analysis process.Like,Which country has won the most prizes in each category? What words are most frequently written in the prize motivation? Can you predict the age, gender, and nationality of next year's Nobel laureates? Nobel Prize by Country/Category/Sex?
 
 ### Design Decisions
-I first sifted through the dataset and roughly thought about which variables I was interested in exploring and which were outside the domain of my exploration. I first planned to look over sales and profit that global store made in these four years.
-I wanted my Tableau story to have a purpose, to show to those who are interested in the facts about the store market understanding. My focus was to find out which are the major factor assist the business in making profit for the Store.
 
-### Tableau Public
-[Profile](https://public.tableau.com/views/ShoppingBag/Story1?:embed=y&:display_count=yes&publish=yes)
+I first shifted through the dataset and roughly thought about which variables I was interested in exploring and which were outside the domain of my exploration. I planned to look over the columns of the data.Then I decided to work on individual columns and there relationship with others.
+For data analysis and interactive, exploratory computing and data visualization, Python has some strong bundle of libraries like pandas,Numpy,Seaborn and Matlabplot for data manipulation tasks and many more.
 
 ### Refrences
-[Tableau Tutorials](https://www.tableau.com/learn/training)
-
-[Udacity Tableau Course](https://in.udacity.com/course/data-visualization-in-tableau--ud1006)
 
 [Kaggle Dataset](https://www.kaggle.com/datasets)
 
-[Tableau Dataset](https://public.tableau.com/en-us/s/resources)
+[Data.world](https://data.world/)
 
 
 
